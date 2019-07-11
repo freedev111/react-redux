@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const bodyPaser = require('body-parser');
 const passport = require('passport');
 const config = require('./db');
+
 const users = require('./routes/user');
+const todos = require('./routes/todo');
 
 mongoose.connect(config.DB, { useNewUrlParser: true}).then(
     () => { console.log('Database is connected') },
@@ -19,6 +21,7 @@ app.use(bodyPaser.urlencoded({ extended: false }));
 app.use(bodyPaser.json());
 
 app.use('/api/users', users);
+app.use('/api/todos', todos);
 
 app.get('/', function(req, res) {
     res.send('Hello');
