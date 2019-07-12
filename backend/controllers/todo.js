@@ -14,14 +14,15 @@ function create(req, res) {
 }
 
 function read(req, res) {
-    return req.todo;
+    res.json(req.todo);
 }
 
 function update(req, res) {
-    const data = res.body;
-    const newTodo = Object.assign({}, req.todo, data);
+    const data = req.body;
 
-    Todo.save(data)
+    req.todo = Object.assign(req.todo, data);
+
+    req.todo.save()
     .then(todo => {
         res.json(todo);
     })
@@ -31,7 +32,7 @@ function update(req, res) {
 }
 
 function del(req, res) {
-    req.delete()
+    req.todo.delete()
     .then(todo => {
         req.json(todo);
     })
@@ -40,10 +41,11 @@ function del(req, res) {
     })
 }
 
-function GetTodo(req, res, todoid) {
-    Todo.findById(todoid)
+function GetTodo(req, res, next, id) {
+    Todo.findById(id)
     .then(todo => {
         req.todo = todo;
+        next();
     })
     .catch(err => {
         res.status(404).json(err);
