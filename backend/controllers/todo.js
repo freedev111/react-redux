@@ -1,5 +1,14 @@
 const Todo = require('../models/Todo');
 
+function list(req, res) {
+    Todo.find({})
+    .then(todos => {
+        res.json(todos);
+    })
+    .catch(err => {
+        res.status(404).json(err);
+    })
+}
 function create(req, res) {
     const data = req.body;
     const newTodo = new Todo(data);
@@ -11,10 +20,6 @@ function create(req, res) {
     .catch(err => {
         res.status(404).json(err);
     })
-}
-
-function read(req, res) {
-    res.json(req.todo);
 }
 
 function update(req, res) {
@@ -34,7 +39,7 @@ function update(req, res) {
 function del(req, res) {
     req.todo.delete()
     .then(todo => {
-        req.json(todo);
+        res.json(todo);
     })
     .catch(err => {
         res.status(404).json(err);
@@ -53,8 +58,8 @@ function GetTodo(req, res, next, id) {
 }
 
 module.exports = {
+    list, 
     create,
-    read,
     update,
     del,
     GetTodo,
